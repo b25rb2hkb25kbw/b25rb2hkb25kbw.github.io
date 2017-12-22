@@ -1,0 +1,49 @@
+body{
+    margin: 0;
+}
+
+div.wrapper {
+	max-width: 960px;
+	height: 100vh;
+	max-height: 500px;
+	margin: auto auto;
+	padding: 10px;
+	background: lightgray;
+	position: relative;
+}
+
+#quiz-game-main-section ul.problem-choices{
+	position: absolute;
+	bottom: 0;
+	padding:0; 
+	width: 90%;
+	-webkit-box-sizing: border-box; /* Webkit系用 */
+	-moz-box-sizing: border-box;     /* Firefox用 */
+	box-sizing: border-box;           /* 標準 */
+}
+
+#quiz-game-main-section ul.problem-choices li{
+	display: flex;
+	width: 100%;
+	background: beige;
+	height: 40px;
+	margin: 10px;
+	align-items: center;
+	padding-left: 10px;
+	-webkit-box-sizing: border-box; /* Webkit系用 */
+	-moz-box-sizing: border-box;     /* Firefox用 */
+	box-sizing: border-box;           /* 標準 */
+}
+
+#quiz-game-main-section > p.problem-statement > strong{
+	text-decoration: underline;
+}
+
+#quiz-game-main-section > p.problem-statement > span.statement-source{
+	color: gray;
+	font-size: 80%;
+}
+
+#quiz-game-main-section p.answer-statement > strong{
+	color: darkred;
+}
