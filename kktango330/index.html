@@ -30,6 +30,9 @@
 	});
 	function checkPassword(elem){
 		var encrypted = CryptoJS.SHA256(elem.value).toString(CryptoJS.enc.Base64);
+		$("input[name=password_check]").val(encrypted);
+		var modifiedKey = CryptoJS.SHA256(elem.value + "+").toString(CryptoJS.enc.Base64)
+		$("input[name=encryption_key]").val(modifiedKey);
 		if(truePassword==encrypted){
 			$("#password-information").text("");
 			$("input[type=submit]").removeAttr('disabled');
@@ -50,10 +53,12 @@
 		範囲：<input type="text" name="start">番から<input type="text" name="end">番まで
 	</p>
 	<p>
-		<input type="radio" name="type" value="random">ランダム
+		<input type="radio" name="type" value="random" selected>ランダム
 		<input type="radio" name="type" value="recent">最近やっていない問題から
 		<input type="radio" name="type" value="wrong">最近間違えた問題から
 	</p>
+		<input type="hidden" name="password_check">
+		<input type="hidden" name="encryption_key">
 	<p>
 		<input type="submit" value="開始" disabled>
 	</p>
