@@ -130,7 +130,7 @@ function pageClicked(){
 
 function returnToTopPage(error){
     console.log("error");
-    if(window.location.host == b25rb2hkb25kbw.github.io){
+    if(window.location.host == "b25rb2hkb25kbw.github.io"){
         location.href = "./index.html?error=true";
     }
 }
