@@ -35,6 +35,14 @@ div.wrapper {
 	box-sizing: border-box;           /* 標準 */
 }
 
+#quiz-game-main-section ul.problem-choices li.wrong_choice{
+    background: lightcoral;
+}
+
+#quiz-game-main-section ul.problem-choices li.right_choice{
+    background: lightgreen;
+}
+
 #quiz-game-main-section > p.problem-statement > strong{
 	text-decoration: underline;
 }
