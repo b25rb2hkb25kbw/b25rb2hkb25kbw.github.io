@@ -24,28 +24,39 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/aes.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="./common.js"></script>
+<script>
+$(function(){
+    var truePassword;
+    $.get("passwd", function(data){
+        truePassword = data;
+        if($.cookie("password_check") == data) location.href = "./"
+    });
+    $("#password-input").change(function(){
+        var encrypted = CryptoJS.SHA256(this.value)
+            .toString(CryptoJS.enc.Base64);
+        var modifiedKey = CryptoJS.SHA256(this.value + "+")
+            .toString(CryptoJS.enc.Base64);
+        if(truePassword==encrypted){
+            $("#password-information").text("");
+            $.cookie("password_check", encrypted, {expires : 7});
+            $.cookie("encryption_key", modifiedKey, {expires : 7});
+            location.href = "./";
+        }else{
+            $("#password-information").text("パスワードが違います。");
+        }
+    })
+});
+</script>
 <section>
-	<h1>究める古典単語330　一問一答テスト</h1>
-<form action="./quiz.html">
-	<!--<p>
-		パスワード：<input type="password" onChange="checkPassword(this)">
+	<h1>ログイン</h1>
+    <p>データは暗号化されています。ログインしてください。</p>
+<form id="password-form">
+	<p>
+		パスワード：<input type="password" id="password-input">
 		<strong id="password-information"></strong>
-	</p>-->
-	<p>
-		範囲：<input type="text" name="start">番から<input type="text" name="end">番まで
 	</p>
-	<p>
-		<input type="radio" name="type" value="random" selected>ランダム
-		<input type="radio" name="type" value="recent">最近やっていない問題から
-		<input type="radio" name="type" value="wrong">最近間違えた問題から
-	</p>
-		<!--<input type="hidden" name="password_check">
-		<input type="hidden" name="encryption_key">-->
-	<p>
-		<input type="submit" value="開始">
-	</p>
+    <button type="button" id="login-button">ログイン</button>
 </form>
-	</section>
+</section>
 </body>
 </html>

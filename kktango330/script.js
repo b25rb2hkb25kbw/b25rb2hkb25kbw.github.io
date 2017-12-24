@@ -1,46 +1,20 @@
-function parse_query_string(query) {
-  var vars = query.split("&");
-  var query_string = {};
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split("=");
-    // If first entry with this name
-    if (typeof query_string[pair[0]] === "undefined") {
-      query_string[pair[0]] = decodeURIComponent(pair[1]);
-      // If second entry with this name
-    } else if (typeof query_string[pair[0]] === "string") {
-      var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
-      query_string[pair[0]] = arr;
-      // If third or later entry with this name
-    } else {
-      query_string[pair[0]].push(decodeURIComponent(pair[1]));
-    }
-  }
-  return query_string;
-}
-
-var query;
+// var query;
 var problemData;
 var gameData = {};
 
 $(function(){
-	query=parse_query_string(location.search.substring(1));
+	// query=parse_query_string(location.search.substring(1));
     setEvents();
-	$.get("passwd", function(data){
-		if(query.password_check != data){
-            returnToTopPage();
-			return;
-		}
-        $.get("data.txt", function(data){
-            try{
-                var decrypted = CryptoJS.AES.decrypt(data,query.encryption_key).toString(CryptoJS.enc.Utf8);
-                problemData = JSON.parse(decrypted);
-                initGame();
-            }catch(error){
-                console.log(error);
-                returnToTopPage();
-            }
-        });
-	});
+    $.get("data.txt", function(data){
+        try{
+            var decrypted = CryptoJS.AES.decrypt(data,$.cookie("encryption_key")).toString(CryptoJS.enc.Utf8);
+            problemData = JSON.parse(decrypted);
+            initGame();
+        }catch(error){
+            console.log("Parsing Error");
+            goLoginPage();
+        }
+    });
 });
 
 function setEvents(){
@@ -129,7 +103,7 @@ function pageClicked(){
 }
 
 function returnToTopPage(error){
-    console.log("error");
+    console.log("go to login page");
     if(window.location.host == "b25rb2hkb25kbw.github.io"){
         location.href = "./index.html?error=true";
     }
@@ -167,24 +141,4 @@ function encryptData(fileName, password, outputFileName){
         a.download = outputFileName;
         a.click();
 	});
-}
-
-function shuffle(array) {
-    var counter = array.length;
-
-    // While there are elements in the array
-    while (counter > 0) {
-        // Pick a random index
-        let index = Math.floor(Math.random() * counter);
-
-        // Decrease counter by 1
-        counter--;
-
-        // And swap the last element with it
-        let temp = array[counter];
-        array[counter] = array[index];
-        array[index] = temp;
-    }
-
-    return array;
 }
