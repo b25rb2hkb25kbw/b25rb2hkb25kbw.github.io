@@ -1,19 +1,19 @@
-// var query;
+var query;
 var problemData;
 var gameData = {};
 
 $(function(){
-	// query=parse_query_string(location.search.substring(1));
+	query=parse_query_string(location.search.substring(1));
     setEvents();
     $.get("data.txt", function(data){
         try{
-            var decrypted = CryptoJS.AES.decrypt(data,$.cookie("encryption_key")).toString(CryptoJS.enc.Utf8);
+            var decrypted = CryptoJS.AES.decrypt(data,Cookies.get("encryption_key")).toString(CryptoJS.enc.Utf8);
             problemData = JSON.parse(decrypted);
-            initGame();
         }catch(error){
             console.log("Parsing Error");
             goLoginPage();
         }
+        initGame();
     });
 });
 
@@ -22,9 +22,20 @@ function setEvents(){
 }
 
 function initGame(){
+    if(!Number.isInteger(query.start)) query.start = 1;
+    else query.start = parseInt(query.start);
+    if(!Number.isInteger(query.end)) query.start = 330;
+    else query.end = parseInt(query.end);
+    if(query.start > query.end)
+        query.end = [query.start, query.start = query.end][0]; //swap
     gameData.questionIdList = [];
     for(var i=0; i<problemData.problemIdList.length; i++){
-        gameData.questionIdList.push(problemData.problemIdList[i]);
+        var id = problemData.problemIdList[i];
+        var problem = problemData.problems[id];
+        // if(problem.word_source_index < query.start ||
+        //   query.end < problem.word_source_index)
+        //     continue;
+        gameData.questionIdList.push(id);
     }
     shuffle(gameData.questionIdList);
     gameData.currentQuestionCount = 0;
@@ -33,7 +44,7 @@ function initGame(){
 }
 
 function currentProblem(){
-    return  problemData.problems[gameData.questionIdList[
+    return problemData.problems[gameData.questionIdList[
         gameData.currentQuestionCount]];
 }
 
@@ -93,7 +104,7 @@ function clickChoices(index, clickEvent){
 
 function pageClicked(){
     if(gameData.showingAnswer){
-        if(++gameData.currentQuestionCount == gameData.questionIdList.length){
+        if(++gameData.currentQuestionCount >= gameData.questionIdList.length){
             returnToTopPage(false);
             return;
         }

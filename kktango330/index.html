@@ -23,7 +23,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/aes.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="./common.js"></script>
 <section>
 	<h1>究める古典単語330　一問一答テスト</h1>
@@ -33,10 +33,10 @@
 		<strong id="password-information"></strong>
 	</p>-->
 	<p>
-		範囲：<input type="text" name="start">番から<input type="text" name="end">番まで
+		範囲：<input type="text" name="start" value="1">番から<input type="text" name="end" value="330">番まで
 	</p>
 	<p>
-		<input type="radio" name="type" value="random" selected>ランダム
+		<input type="radio" name="type" value="random" checked="checked">ランダム
 		<input type="radio" name="type" value="recent">最近やっていない問題から
 		<input type="radio" name="type" value="wrong">最近間違えた問題から
 	</p>

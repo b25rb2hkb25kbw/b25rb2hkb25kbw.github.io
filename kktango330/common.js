@@ -1,5 +1,5 @@
 $(function(){
-    var passCheck=$.cookie("password_check");
+    var passCheck=Cookies.get("password_check");
     if(passCheck === void 0){
         goLoginPage();
     }
@@ -8,8 +8,8 @@ $(function(){
     });
 });
 function goLoginPage(){
-    $.removeCookie("password_check");
-    $.removeCookie("encryption_key");
+    Cookies.remove("password_check");
+    Cookies.remove("encryption_key");
     location.href = "./login.html";
 }
 
