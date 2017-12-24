@@ -22,19 +22,20 @@ function setEvents(){
 }
 
 function initGame(){
-    if(!Number.isInteger(query.start)) query.start = 1;
-    else query.start = parseInt(query.start);
-    if(!Number.isInteger(query.end)) query.start = 330;
-    else query.end = parseInt(query.end);
+    query.start = parseInt(query.start);
+    if(query.start < 1 || query.start > 330) query.start = 1;
+    query.end = parseInt(query.end);
+    if(query.end < 1 || query.end > 330) query.end = 330;
     if(query.start > query.end)
         query.end = [query.start, query.start = query.end][0]; //swap
     gameData.questionIdList = [];
     for(var i=0; i<problemData.problemIdList.length; i++){
         var id = problemData.problemIdList[i];
         var problem = problemData.problems[id];
-        // if(problem.word_source_index < query.start ||
-        //   query.end < problem.word_source_index)
-        //     continue;
+        console.log(problem.word_source_index + ", " + query.start + ", " + query.end);
+        if(problem.word_source_index < query.start ||
+           query.end < problem.word_source_index)
+            continue;
         gameData.questionIdList.push(id);
     }
     shuffle(gameData.questionIdList);
