@@ -32,7 +32,7 @@ function initGame(){
     for(var i=0; i<problemData.problemIdList.length; i++){
         var id = problemData.problemIdList[i];
         var problem = problemData.problems[id];
-        console.log(problem.word_source_index + ", " + query.start + ", " + query.end);
+        // console.log(problem.word_source_index + ", " + query.start + ", " + query.end);
         if(problem.word_source_index < query.start ||
            query.end < problem.word_source_index)
             continue;
@@ -77,8 +77,13 @@ function reloadProblem(){
 function setAnswerDivHTML(problem, showAnswer){
     var answer = problem.answer_statement;
     if(showAnswer){
-        answer = answer.replace(/〔　*〕/, "<strong>" + 
-            problem.problem_choices[problem.answer_index] + "</strong>");
+        var replacements = problem
+            .problem_choices[problem.answer_index].split("／");
+        let i = 0;
+        answer = answer.replace(/〔　*〕/g, function(){
+            if(i+1 < replacements.length) i++;
+            return "<strong>" + replacements[i] + "</strong>"
+        });
     }
     $("#quiz-game-main-section p.answer-statement")
         .html(answer)
@@ -136,8 +141,8 @@ function encryptData(fileName, password, outputFileName){
 				statement_source: elems[2],
 				problem_choices:[elems[3], elems[4], elems[5], elems[6]],
 				answer_statement: elems[7],
-				word_source_index: elems[8],
-				answer_index: elems[9]
+				word_source_index: parseInt(elems[8]),
+				answer_index: parseInt(elems[9])
 			};
 			parsedData.problems[problem.id] = problem;
             parsedData.problemIdList.push(problem.id);
@@ -146,11 +151,15 @@ function encryptData(fileName, password, outputFileName){
 		}
 		console.log(parsedData);
 		var encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsedData), key);
-		console.log(encrypted.toString());
+		// console.log(encrypted.toString());
         var blob = new Blob([encrypted], {type: "text/plain"});var a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.target = '_blank';
         a.download = outputFileName;
         a.click();
 	});
+}
+
+function getPasswdString(password){
+    return CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
 }
