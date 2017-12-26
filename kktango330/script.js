@@ -38,6 +38,8 @@ function initGame(){
             continue;
         gameData.questionIdList.push(id);
     }
+    if(gameData.questionIdList.length == 10)
+        returnToTopPage(true, "該当する問題がありません。");
     shuffle(gameData.questionIdList);
     gameData.currentQuestionCount = 0;
     gameData.showingAnswer = false;
@@ -119,10 +121,12 @@ function pageClicked(){
     }
 }
 
-function returnToTopPage(error){
-    console.log("go to login page");
+function returnToTopPage(error, message){
+    var link = "./index.html?error=true&error_message="
+            + encodeURIComponent(message);
+    console.log("go to login page: " + link);
     if(window.location.host == "b25rb2hkb25kbw.github.io"){
-        location.href = "./index.html?error=true";
+        location.href = link;
     }
 }
 

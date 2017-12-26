@@ -1,8 +1,8 @@
-body{
+body.game-body{
     margin: 0;
 }
 
-div.wrapper {
+div.game-wrapper {
 	max-width: 960px;
 	height: 100vh;
 	max-height: 500px;
@@ -54,4 +54,8 @@ div.wrapper {
 
 #quiz-game-main-section p.answer-statement > strong{
 	color: darkred;
+}
+
+p.error-message { 
+    color: red;
 }
