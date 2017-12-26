@@ -1,6 +1,8 @@
 var query;
 var problemData;
-var gameData = {};
+var gameData = {
+    getElapsedTime: function(){return new Date().getTime() - this.startMillis; }
+};
 
 $(function(){
 	query=parse_query_string(location.search.substring(1));
@@ -46,6 +48,8 @@ function initGame(){
     gameData.correctCount = 0;
     gameData.incorrectCount = 0;
     gameData.showTranslation = (query.show_translation == "on");
+    gameData.timeLimit = parseFloat(query.time_limit) * 1000;
+    if(gameData.timeLimit < 0) gameData.timeLimit = 0;
     reloadProblem();
 }
 
@@ -78,6 +82,8 @@ function reloadProblem(){
             .click(function(event){clickChoices(i,event);})
         );
     }
+    gameData.startMillis = new Date().getTime();
+    if(gameData.timeLimit > 0) reloadTimer();
 }
 
 function setAnswerDivHTML(problem, showAnswer){
@@ -101,18 +107,10 @@ function setAnswerDivHTML(problem, showAnswer){
 
 function clickChoices(index, clickEvent){
     if(!gameData.showingAnswer){
+        $("#quiz-game-main-section li").eq(index).addClass("wrong_choice");
         var problem = currentProblem();
         var ans = gameData.answerIndex;
-        $("#quiz-game-main-section li").eq(index).addClass("wrong_choice");
-        $("#quiz-game-main-section li").eq(ans).addClass("right_choice");
-        if(index == ans){
-            gameData.correctCount++;
-        }else{
-            gameData.incorrectCount++;
-        }
-        setAnswerDivHTML(problem, true);
-        $("#quiz-game-main-section div.answer-div").show();
-        gameData.showingAnswer = true;
+        finishQuestion(index == ans);
         clickEvent.stopPropagation();
     }
 }
@@ -129,6 +127,32 @@ function pageClicked(){
         gameData.showingAnswer = false;
         reloadProblem();
     }
+}
+
+function reloadTimer(){
+    var rate = 100 - gameData.getElapsedTime()/gameData.timeLimit*100;
+    if(rate<=0){
+        console.log("end!");
+        $("#quiz-game-main-section li").addClass("wrong_choice");
+        finishQuestion(false);
+        rate = 0;
+    }
+    $("div.progress-bar-colored").css("width", rate+"%");
+    if(!gameData.showingAnswer) setTimeout(reloadTimer, 100);
+}
+
+function finishQuestion(isCorrect){
+    var problem = currentProblem();
+    var ans = gameData.answerIndex;
+    $("#quiz-game-main-section li").eq(ans).addClass("right_choice");
+    if(isCorrect){
+        gameData.correctCount++;
+    }else{
+        gameData.incorrectCount++;
+    }
+    setAnswerDivHTML(problem, true);
+    $("#quiz-game-main-section div.answer-div").show();
+    gameData.showingAnswer = true;
 }
 
 function returnToTopPage(error, message){

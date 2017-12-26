@@ -64,3 +64,14 @@ p.system-message {
     text-align: center;
     font-size : 70%;
 }
+
+div.progress-bar {
+    height: 5px;
+    background: darkgray;
+}
+
+div.progress-bar-colored {
+    height: 100%;
+    width: 0%;
+    background: Chartreuse;
+}
