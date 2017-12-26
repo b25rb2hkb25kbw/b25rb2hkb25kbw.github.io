@@ -45,9 +45,9 @@ function initGame(){
     }
     if(gameData.questionIdList.length == 0)
         returnToTopPage(true, "該当する問題がありません。");
+    shuffle(gameData.questionIdList);
     if(query.question_count) gameData.questionIdList = 
         gameData.questionIdList.slice(0, query.question_count)
-    shuffle(gameData.questionIdList);
     gameData.currentQuestionCount = 0;
     gameData.showingAnswer = false;
     gameData.correctCount = 0;
