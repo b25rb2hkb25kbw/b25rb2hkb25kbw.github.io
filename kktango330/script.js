@@ -45,6 +45,7 @@ function initGame(){
     gameData.showingAnswer = false;
     gameData.correctCount = 0;
     gameData.incorrectCount = 0;
+    gameData.showTranslation = (query.show_translation == "on");
     reloadProblem();
 }
 
@@ -64,7 +65,8 @@ function reloadProblem(){
             .addClass("statement-source")
             .text("（" + problem.statement_source + "）"));
     setAnswerDivHTML(problem, false);
-    $("#quiz-game-main-section div.answer-div").hide();
+    if(!gameData.showTranslation)
+        $("#quiz-game-main-section div.answer-div").hide();
     $("#quiz-game-main-section li").remove();
     var choices = problem.problem_choices.slice();
     shuffle(choices);
