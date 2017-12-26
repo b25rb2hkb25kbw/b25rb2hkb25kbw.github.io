@@ -31,6 +31,8 @@ function initGame(){
     if(query.end < 1 || query.end > 330) query.end = 330;
     if(query.start > query.end)
         query.end = [query.start, query.start = query.end][0]; //swap
+    query.question_count = parseInt(query.question_count);
+    if(!(query.question_count > 0)) query.question_count = 0;
     gameData.questionIdList = [];
     for(var i=0; i<problemData.problemIdList.length; i++){
         var id = problemData.problemIdList[i];
@@ -41,8 +43,10 @@ function initGame(){
             continue;
         gameData.questionIdList.push(id);
     }
-    if(gameData.questionIdList.length == 10)
+    if(gameData.questionIdList.length == 0)
         returnToTopPage(true, "該当する問題がありません。");
+    if(query.question_count) gameData.questionIdList = 
+        gameData.questionIdList.slice(0, query.question_count)
     shuffle(gameData.questionIdList);
     gameData.currentQuestionCount = 0;
     gameData.showingAnswer = false;
@@ -50,7 +54,7 @@ function initGame(){
     gameData.incorrectCount = 0;
     gameData.showTranslation = (query.show_translation == "on");
     gameData.timeLimit = parseFloat(query.time_limit) * 1000;
-    if(gameData.timeLimit < 0) gameData.timeLimit = 0;
+    if(!(gameData.timeLimit >= 0)) gameData.timeLimit = 0;
     reloadProblem();
     $("div.quit-button").show();
 }
