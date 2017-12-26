@@ -43,6 +43,8 @@ function initGame(){
     shuffle(gameData.questionIdList);
     gameData.currentQuestionCount = 0;
     gameData.showingAnswer = false;
+    gameData.correctCount = 0;
+    gameData.incorrectCount = 0;
     reloadProblem();
 }
 
@@ -102,7 +104,9 @@ function clickChoices(index, clickEvent){
         $("#quiz-game-main-section li").eq(index).addClass("wrong_choice");
         $("#quiz-game-main-section li").eq(ans).addClass("right_choice");
         if(index == ans){
+            gameData.correctCount++;
         }else{
+            gameData.incorrectCount++;
         }
         setAnswerDivHTML(problem, true);
         $("#quiz-game-main-section div.answer-div").show();
@@ -114,7 +118,10 @@ function clickChoices(index, clickEvent){
 function pageClicked(){
     if(gameData.showingAnswer){
         if(++gameData.currentQuestionCount >= gameData.questionIdList.length){
-            returnToTopPage(false);
+            location.href = "./result.html?" + $.param({
+                correct_count: gameData.correctCount,
+                incorrect_count: gameData.incorrectCount
+            });
             return;
         }
         gameData.showingAnswer = false;

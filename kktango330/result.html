@@ -13,48 +13,28 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 <link rel="shortcut icon" href="">
+
 <link rel="stylesheet" href="./style.css">
-<!-- <link rel="stylesheet" href="./style.css"> -->
 </head>
-<body>
+<body class="game-body">
 <!-- Place your content here -->
 <!-- SCRIPTS -->
+<!-- Example: <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/aes.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="./common.js"></script>
-<script>
-    $(function(){
-        let query=parse_query_string(location.search.substring(1));
-        if(query.error_message !== void 0){
-            $("p.error-message").text(query.error_message);
-        }
-    });
-</script>
-    <section>
-	<h1>究める古典単語330　一問一答テスト</h1>
-<p class="error-message"></p>
-<form action="./quiz.html">
-	<!--<p>
-		パスワード：<input type="password" onChange="checkPassword(this)">
-		<strong id="password-information"></strong>
-	</p>-->
-	<p>
-		範囲：<input type="text" name="start" value="1">番から<input type="text" name="end" value="330">番まで
-	</p>
-	<p>
-		<input type="radio" name="type" value="random" checked="checked">ランダム
-		<input type="radio" name="type" value="recent">最近やっていない問題から
-		<input type="radio" name="type" value="wrong">最近間違えた問題から
-	</p>
-		<!--<input type="hidden" name="password_check">
-		<input type="hidden" name="encryption_key">-->
-	<p>
-		<input type="submit" value="開始">
-	</p>
-</form>
+<script src="./result_script.js"></script>
+<div class="game-wrapper">
+	<section id="quiz-game-main-section">
+		<h3>結果</h3>
+		<p id="count-result"></p>
+		<ul class="problem-choices">
+			<li id="return-button">戻る</li>
+		</ul>
 	</section>
+</div>
 </body>
 </html>
