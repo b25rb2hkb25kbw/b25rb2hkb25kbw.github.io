@@ -78,7 +78,9 @@ function reloadProblem(){
         if(choices[i] == problem.problem_choices[problem.answer_index])
             gameData.answerIndex = i;
         $("#quiz-game-main-section ul").append($("<li>")
-            .text(choices[i])
+            .html('<span class="choice-index-mark">'
+                  +String.fromCharCode('①'.codePointAt(0) + i)
+                  +'</span>' + choices[i])
             .click(function(event){clickChoices(i,event);})
         );
     }
