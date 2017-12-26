@@ -18,7 +18,7 @@ $(function(){
 });
 
 function setEvents(){
-    $("div.wrapper").click(pageClicked);
+    $("div.game-wrapper").click(pageClicked);
 }
 
 function initGame(){
@@ -92,6 +92,7 @@ function setAnswerDivHTML(problem, showAnswer){
         .append($("<span>")
             .addClass("statement-source")
             .text("→" + problem.word_source_index));
+    $("p.system-message").text("画面タップで次へ");
 }
 
 function clickChoices(index, clickEvent){
