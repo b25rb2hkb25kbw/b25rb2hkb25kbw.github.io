@@ -3,9 +3,10 @@ body.game-body{
 }
 
 div.game-wrapper {
+    box-sizing: border-box;
 	max-width: 960px;
 	height: 100vh;
-	max-height: 500px;
+	max-height: 800px;
 	margin: auto auto;
 	padding: 10px;
 	background: lightgray;
