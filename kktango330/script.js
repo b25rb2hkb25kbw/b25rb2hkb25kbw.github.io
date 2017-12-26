@@ -21,6 +21,7 @@ $(function(){
 
 function setEvents(){
     $("div.game-wrapper").click(pageClicked);
+    $("div.quit-button").click(goToResultPage);
 }
 
 function initGame(){
@@ -51,6 +52,7 @@ function initGame(){
     gameData.timeLimit = parseFloat(query.time_limit) * 1000;
     if(gameData.timeLimit < 0) gameData.timeLimit = 0;
     reloadProblem();
+    $("div.quit-button").show();
 }
 
 function currentProblem(){
@@ -120,10 +122,7 @@ function clickChoices(index, clickEvent){
 function pageClicked(){
     if(gameData.showingAnswer){
         if(++gameData.currentQuestionCount >= gameData.questionIdList.length){
-            location.href = "./result.html?" + $.param({
-                correct_count: gameData.correctCount,
-                incorrect_count: gameData.incorrectCount
-            });
+            goToResultPage();
             return;
         }
         gameData.showingAnswer = false;
@@ -164,6 +163,13 @@ function returnToTopPage(error, message){
     if(window.location.host == "b25rb2hkb25kbw.github.io"){
         location.href = link;
     }
+}
+
+function goToResultPage(){
+    location.href = "./result.html?" + $.param({
+        correct_count: gameData.correctCount,
+        incorrect_count: gameData.incorrectCount
+    });
 }
 
 function encryptData(fileName, password, outputFileName){
