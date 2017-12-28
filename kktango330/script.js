@@ -35,7 +35,11 @@ $(function(){
 
 function setEvents(){
     $("div.game-wrapper").click(pageClicked);
-    $("div.quit-button").click(goToResultPage);
+    $("div.quit-button").click(function(event){
+        event.stopPropagation();
+        goToResultPage();
+    });
+    $("div.skip-button").click(skipQuestion);
 }
 
 function initGame(){
@@ -71,6 +75,7 @@ function initGame(){
     if(!(gameData.timeLimit >= 0)) gameData.timeLimit = 0;
     reloadProblem();
     $("div.quit-button").show();
+    $("div.skip-button").show();
 }
 
 function currentProblem(){
@@ -135,6 +140,13 @@ function clickChoices(index, clickEvent){
         finishQuestion(index == ans);
         clickEvent.stopPropagation();
     }
+}
+
+function skipQuestion(event){
+    if(gameData.showingAnswer) return;
+    $("#quiz-game-main-section li").addClass("wrong_choice");
+    finishQuestion(false);
+    event.stopPropagation();
 }
 
 function pageClicked(){

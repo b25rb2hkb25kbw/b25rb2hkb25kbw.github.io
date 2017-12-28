@@ -17,12 +17,24 @@ div.game-wrapper {
 
 #quiz-game-main-section div.quit-button{
     position: absolute;
-    right: 10px;
+    right: 110px;
     top: 10px;
     width: 50px;
     height: 30px;
     line-height: 30px;
     background-color: azure;
+    text-align: center;
+    display: none;
+}
+
+#quiz-game-main-section div.skip-button{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
+    background-color: lightpink;
     text-align: center;
     display: none;
 }
