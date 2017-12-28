@@ -85,6 +85,26 @@ function initGame(){
         }
         gameData.questionIdList
             .sort(function(a,b){return lastPlayed[a]-lastPlayed[b];});
+    }else if(query.mode=="wrong"){
+        var risks = {};
+        for(var i=0; i<gameData.questionIdList.length; i++){
+            var id=gameData.questionIdList[i];
+            var record=solvedData[id];
+            var sum=0, denominator = 1e-10;
+            var now=new Date().getTime();
+            for(var j=0; j<record.length; j++){
+                var data=record[j];
+                var factor=Math.pow(2, -(now-data.time)/(7*24*60*60*1000));
+                sum+=(data.correct?-factor:factor)
+                denominator+=factor;
+            }
+            risks[id]=sum/denominator;
+            if(sum!=0){
+                console.log(id, sum/denominator);
+            }
+        }
+        gameData.questionIdList
+            .sort(function(a,b){return risks[b]-risks[a];});
     }else{
         shuffle(gameData.questionIdList);
     }
