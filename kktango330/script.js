@@ -7,7 +7,20 @@ var gameData = {
 $(function(){
 	query=parse_query_string(location.search.substring(1));
     setEvents();
-    $.get("data.txt", function(data){
+    $.ajax({
+        url: "data.txt",
+        type: "get",
+        data: {},
+        xhr: function () {
+            var xhr = $.ajaxSettings.xhr();
+            xhr.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    setProgressBarValue(e.loaded / e.total);
+                }
+            };
+            return xhr;
+        }
+    }).done(function(data){
         try{
             var decrypted = CryptoJS.AES.decrypt(data,Cookies.get("encryption_key")).toString(CryptoJS.enc.Utf8);
             problemData = JSON.parse(decrypted);
@@ -136,15 +149,19 @@ function pageClicked(){
 
 function reloadTimer(){
     if(gameData.showingAnswer) return;
-    var rate = 100 - gameData.getElapsedTime()/gameData.timeLimit*100;
+    var rate=1-gameData.getElapsedTime()/gameData.timeLimit;
     if(rate<=0){
         console.log("end!");
         $("#quiz-game-main-section li").addClass("wrong_choice");
         finishQuestion(false);
         rate = 0;
     }
-    $("div.progress-bar-colored").css("width", rate+"%");
+    setProgressBarValue(rate);
     if(!gameData.showingAnswer) setTimeout(reloadTimer, 100);
+}
+
+function setProgressBarValue(rate){
+    $("div.progress-bar-colored").css("width", rate*100+"%");
 }
 
 function finishQuestion(isCorrect){
