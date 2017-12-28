@@ -69,3 +69,27 @@ function shuffle(array) {
 
     return array;
 }
+
+function setProblemStatementHTML(dom, problem){
+    dom.html(problem.problem_statement)
+        .append($("<span>")
+            .addClass("statement-source")
+            .text("（" + problem.statement_source + "）"));
+}
+
+function setAnswerStatementHTML(dom, problem, showAnswer){
+    var answer = problem.answer_statement;
+    if(showAnswer){
+        var replacements = problem
+            .problem_choices[problem.answer_index].split("／");
+        let i = 0;
+        answer = answer.replace(/〔　*〕/g, function(){
+            if(i+1 < replacements.length) i++;
+            return "<strong>" + replacements[i] + "</strong>"
+        });
+    }
+    dom.html(answer)
+        .append($("<span>")
+            .addClass("statement-source")
+            .text("→" + problem.word_source_index));
+}

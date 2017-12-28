@@ -71,11 +71,11 @@ div.game-wrapper {
     background: lightgreen;
 }
 
-#quiz-game-main-section > p.problem-statement > strong{
+p.problem-statement > strong{
 	text-decoration: underline;
 }
 
-#quiz-game-main-section > p.problem-statement > span.statement-source{
+p.problem-statement > span.statement-source{
     color: gray;
     font-size: 80%;
 }
@@ -88,7 +88,7 @@ ul.problem-choices span.choice-index-mark{
 }
 
 
-#quiz-game-main-section p.answer-statement > strong{
+p.answer-statement > strong{
 	color: darkred;
 }
 
@@ -110,4 +110,8 @@ div.progress-bar-colored {
     height: 100%;
     width: 0%;
     background: Chartreuse;
+}
+
+.template{
+    display: none;
 }

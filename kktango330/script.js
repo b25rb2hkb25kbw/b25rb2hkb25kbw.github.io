@@ -3,10 +3,12 @@ var problemData;
 var gameData = {
     getElapsedTime: function(){return new Date().getTime() - this.startMillis; }
 };
-
+var solvedData;
 $(function(){
 	query=parse_query_string(location.search.substring(1));
     setEvents();
+    solvedData = Cookies.getJSON("solved_data");
+    if(solvedData === void 0) solvedData = {};
     $.ajax({
         url: "data.txt",
         type: "get",
@@ -60,6 +62,8 @@ function initGame(){
         var id = problemData.problemIdList[i];
         var problem = problemData.problems[id];
         // console.log(problem.word_source_index + ", " + query.start + ", " + query.end);
+        if(solvedData[id] === void 0)
+            solvedData[id]=[];
         if(problem.word_source_index < query.start ||
            query.end < problem.word_source_index)
             continue;
@@ -74,6 +78,7 @@ function initGame(){
     gameData.showingAnswer = false;
     gameData.correctCount = 0;
     gameData.incorrectCount = 0;
+    gameData.startTime = new Date().getTime();
     gameData.showTranslation = (query.show_translation == "on");
     gameData.timeLimit = parseFloat(query.time_limit) * 1000;
     if(!(gameData.timeLimit >= 0)) gameData.timeLimit = 0;
@@ -92,12 +97,10 @@ function reloadProblem(){
     var problem = currentProblem();
     $("#quiz-game-main-section>h3").html(
         "問題 " + (questionCount + 1) + "/" + gameData.questionIdList.length);
-    $("#quiz-game-main-section>p.problem-statement")
-        .html(problem.problem_statement)
-        .append($("<span>")
-            .addClass("statement-source")
-            .text("（" + problem.statement_source + "）"));
-    setAnswerDivHTML(problem, false);
+    setProblemStatementHTML(
+        $("#quiz-game-main-section>p.problem-statement"), problem);
+    setAnswerStatementHTML(
+        $("#quiz-game-main-section p.answer-statement"), problem, false);
     if(!gameData.showTranslation)
         $("#quiz-game-main-section div.answer-div").hide();
     $("#quiz-game-main-section li").remove();
@@ -115,25 +118,6 @@ function reloadProblem(){
     }
     gameData.startMillis = new Date().getTime();
     if(gameData.timeLimit > 0) reloadTimer();
-}
-
-function setAnswerDivHTML(problem, showAnswer){
-    var answer = problem.answer_statement;
-    if(showAnswer){
-        var replacements = problem
-            .problem_choices[problem.answer_index].split("／");
-        let i = 0;
-        answer = answer.replace(/〔　*〕/g, function(){
-            if(i+1 < replacements.length) i++;
-            return "<strong>" + replacements[i] + "</strong>"
-        });
-    }
-    $("#quiz-game-main-section p.answer-statement")
-        .html(answer)
-        .append($("<span>")
-            .addClass("statement-source")
-            .text("→" + problem.word_source_index));
-    $("p.system-message").text("画面タップで次へ");
 }
 
 function clickChoices(index, clickEvent){
@@ -215,8 +199,19 @@ function finishQuestion(isCorrect){
     }else{
         gameData.incorrectCount++;
     }
-    setAnswerDivHTML(problem, true);
+    setAnswerStatementHTML(
+        $("#quiz-game-main-section p.answer-statement"), problem, true);
+    $("p.system-message").text("画面タップで次へ");
     $("#quiz-game-main-section div.answer-div").show();
+    solvedData[problem.id].push({
+        id: problem.id,
+        time: new Date().getTime(), 
+        correct: isCorrect
+    });
+    localStorage.setItem("solved_data", JSON.stringify(solvedData));
+//    Cookies.set("solved_data", solvedData, 
+//               {expires: 365});
+//    console.log(Cookies.get("solved_data"));
 }
 
 function returnToTopPage(error, message){
@@ -231,7 +226,9 @@ function returnToTopPage(error, message){
 function goToResultPage(){
     location.href = "./result.html?" + $.param({
         correct_count: gameData.correctCount,
-        incorrect_count: gameData.incorrectCount
+        incorrect_count: gameData.incorrectCount,
+        start_time: gameData.startTime,
+        end_time: new Date().getTime()
     });
 }
 
