@@ -7,8 +7,9 @@ var solvedData;
 $(function(){
 	query=parse_query_string(location.search.substring(1));
     setEvents();
-    solvedData = Cookies.getJSON("solved_data");
-    if(solvedData === void 0) solvedData = {};
+    solvedData = JSON.parse(localStorage.getItem("solved_data"));
+    // solvedData = Cookies.getJSON("solved_data");
+    if(solvedData == null) solvedData = {};
     $.ajax({
         url: "data.txt",
         type: "get",
@@ -25,7 +26,9 @@ $(function(){
         }
     }).done(function(data){
         try{
-            var decrypted = CryptoJS.AES.decrypt(data,Cookies.get("encryption_key")).toString(CryptoJS.enc.Utf8);
+            var decrypted = CryptoJS.AES.decrypt(
+                    data,localStorage.getItem("encryption_key"))
+                .toString(CryptoJS.enc.Utf8);
             problemData = JSON.parse(decrypted);
         }catch(error){
             console.log("Parsing Error");

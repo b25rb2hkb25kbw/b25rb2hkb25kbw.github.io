@@ -1,7 +1,7 @@
 $(function(){
-    var passCheck=Cookies.get("password_check");
+    var passCheck=localStorage.getItem("password_check");
 //    console.log(passCheck);
-    if(passCheck === void 0){
+    if(passCheck === null){
         goLoginPage();
     }
     $.get("passwd", function(data){
@@ -11,8 +11,8 @@ $(function(){
     });
 });
 function goLoginPage(){
-    Cookies.remove("password_check");
-    Cookies.remove("encryption_key");
+    localStorage.removeItem("password_check");
+    localStorage.removeItem("encryption_key");
     location.href = "./login.html";
 }
 
