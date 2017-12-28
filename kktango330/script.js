@@ -34,12 +34,16 @@ $(function(){
 });
 
 function setEvents(){
+    window.addEventListener("keydown", keyDown);
     $("div.game-wrapper").click(pageClicked);
     $("div.quit-button").click(function(event){
         event.stopPropagation();
         goToResultPage();
     });
-    $("div.skip-button").click(skipQuestion);
+    $("div.skip-button").click(function(event){
+        event.stopPropagation();
+        skipQuestion();
+    });
 }
 
 function initGame(){
@@ -134,29 +138,52 @@ function setAnswerDivHTML(problem, showAnswer){
 
 function clickChoices(index, clickEvent){
     if(!gameData.showingAnswer){
-        $("#quiz-game-main-section li").eq(index).addClass("wrong_choice");
-        var problem = currentProblem();
-        var ans = gameData.answerIndex;
-        finishQuestion(index == ans);
+        decideChoices(index);
         clickEvent.stopPropagation();
     }
+}
+
+function decideChoices(index){
+    $("#quiz-game-main-section li").eq(index).addClass("wrong_choice");
+    var problem = currentProblem();
+    var ans = gameData.answerIndex;
+    finishQuestion(index == ans);
 }
 
 function skipQuestion(event){
     if(gameData.showingAnswer) return;
     $("#quiz-game-main-section li").addClass("wrong_choice");
     finishQuestion(false);
-    event.stopPropagation();
 }
 
 function pageClicked(){
+    goNextProblem();
+}
+
+function goNextProblem(){
     if(gameData.showingAnswer){
-        if(++gameData.currentQuestionCount >= gameData.questionIdList.length){
+        if(++gameData.currentQuestionCount 
+           >= gameData.questionIdList.length){
             goToResultPage();
             return;
         }
         gameData.showingAnswer = false;
         reloadProblem();
+    }
+}
+
+function keyDown(event){
+    if(!gameData.showingAnswer){
+        for(var i = 0; i < 4; i++){
+            if(event.key != i+1) continue;
+            decideChoices(i);
+        }
+        if(event.key == "0") skipQuestion();
+    }else{
+        var isSelection=false;
+        for(var i = 0; i <= 4; i++) 
+            if(event.key==i) isSelection=true;
+        if(!isSelection) goNextProblem();
     }
 }
 
