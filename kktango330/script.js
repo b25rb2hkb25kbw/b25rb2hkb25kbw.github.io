@@ -135,6 +135,7 @@ function pageClicked(){
 }
 
 function reloadTimer(){
+    if(gameData.showingAnswer) return;
     var rate = 100 - gameData.getElapsedTime()/gameData.timeLimit*100;
     if(rate<=0){
         console.log("end!");
@@ -147,6 +148,8 @@ function reloadTimer(){
 }
 
 function finishQuestion(isCorrect){
+    if(gameData.showingAnswer) return;
+    gameData.showingAnswer = true;
     var problem = currentProblem();
     var ans = gameData.answerIndex;
     $("#quiz-game-main-section li").eq(ans).addClass("right_choice");
@@ -157,7 +160,6 @@ function finishQuestion(isCorrect){
     }
     setAnswerDivHTML(problem, true);
     $("#quiz-game-main-section div.answer-div").show();
-    gameData.showingAnswer = true;
 }
 
 function returnToTopPage(error, message){
