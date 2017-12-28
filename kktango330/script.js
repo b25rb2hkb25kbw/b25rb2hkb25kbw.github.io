@@ -74,7 +74,20 @@ function initGame(){
     }
     if(gameData.questionIdList.length == 0)
         returnToTopPage(true, "該当する問題がありません。");
-    shuffle(gameData.questionIdList);
+    if(query.mode == "recent"){
+        var lastPlayed = {};
+        for(var i=0; i<gameData.questionIdList.length; i++){
+            var id=gameData.questionIdList[i];
+            if(solvedData[id].length == 0) lastPlayed[id] = 0;
+            else lastPlayed[id] = 
+                solvedData[id][solvedData[id].length - 1].time;
+            lastPlayed[id] += 6 * 60 * 60 * 1000 * Math.random();
+        }
+        gameData.questionIdList
+            .sort(function(a,b){return lastPlayed[a]-lastPlayed[b];});
+    }else{
+        shuffle(gameData.questionIdList);
+    }
     if(query.question_count) gameData.questionIdList = 
         gameData.questionIdList.slice(0, query.question_count)
     gameData.currentQuestionCount = 0;
