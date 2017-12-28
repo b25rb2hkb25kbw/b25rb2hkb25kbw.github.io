@@ -15,7 +15,7 @@ $(function(){
     solvedData = JSON.parse(localStorage.getItem("solved_data"));
     $.get("data.txt", function(data){
         try{
-            var decrypted = CryptoJS.AES.decrypt(data,localStorage.getItem("encryption_key")).toString(CryptoJS.enc.Utf8);
+            var decrypted = CryptoJS.AES.decrypt(data,Cookies.get("encryption_key")).toString(CryptoJS.enc.Utf8);
             problemData = JSON.parse(decrypted);
         }catch(error){
             console.log("Parsing Error");

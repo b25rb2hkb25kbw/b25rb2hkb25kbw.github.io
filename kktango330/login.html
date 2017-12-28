@@ -29,7 +29,7 @@ $(function(){
     var truePassword;
     $.get("passwd", function(data){
         truePassword = data;
-        if(localStorage.getItem("password_check") == data) location.href = "./"
+        if(Cookies.get("password_check") == data) location.href = "./"
     });
     $("#password-input").change(function(){
         var encrypted = CryptoJS.SHA256(this.value)
@@ -38,11 +38,11 @@ $(function(){
             .toString(CryptoJS.enc.Base64);
         if(truePassword==encrypted){
             $("#password-information").text("");
-            localStorage.setItem("password_check", encrypted);
-            localStorage.setItem("encryption_key", modifiedKey);
-//            var policy = {expires : 365};
-//            Cookies.set("password_check", encrypted, policy);
-//            Cookies.set("encryption_key", modifiedKey, policy);
+//            localStorage.setItem("password_check", encrypted);
+//            localStorage.setItem("encryption_key", modifiedKey);
+            var policy = {expires : 365};
+            Cookies.set("password_check", encrypted, policy);
+            Cookies.set("encryption_key", modifiedKey, policy);
             location.href = "./";
         }else{
             $("#password-information").text("パスワードが違います。");

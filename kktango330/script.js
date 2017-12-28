@@ -27,7 +27,7 @@ $(function(){
     }).done(function(data){
         try{
             var decrypted = CryptoJS.AES.decrypt(
-                    data,localStorage.getItem("encryption_key"))
+                    data,Cookies.get("encryption_key"))
                 .toString(CryptoJS.enc.Utf8);
             problemData = JSON.parse(decrypted);
         }catch(error){
