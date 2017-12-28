@@ -16,6 +16,7 @@ $(function(){
             xhr.onprogress = function (e) {
                 if (e.lengthComputable) {
                     setProgressBarValue(e.loaded / e.total);
+                    console.log(e.loaded);
                 }
             };
             return xhr;

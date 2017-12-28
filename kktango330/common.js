@@ -1,9 +1,12 @@
 $(function(){
     var passCheck=Cookies.get("password_check");
+//    console.log(passCheck);
     if(passCheck === void 0){
         goLoginPage();
     }
     $.get("passwd", function(data){
+//        console.log(data);
+//        console.log(data == passCheck);
         if(data != passCheck) goLoginPage();
     });
 });

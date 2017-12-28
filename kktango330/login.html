@@ -38,7 +38,7 @@ $(function(){
             .toString(CryptoJS.enc.Base64);
         if(truePassword==encrypted){
             $("#password-information").text("");
-            var policy = {expires : 7};
+            var policy = {expires : 365};
             Cookies.set("password_check", encrypted, policy);
             Cookies.set("encryption_key", modifiedKey, policy);
             location.href = "./";
