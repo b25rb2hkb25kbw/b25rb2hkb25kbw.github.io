@@ -1,6 +1,7 @@
 var query;
 var problemData;
 var solvedData;
+var wrongResults;
 
 $(function(){
 	query=parse_query_string(location.search.substring(1));
@@ -25,7 +26,7 @@ $(function(){
 });
 
 function addWrongProblems(){
-    var wrongResults = [];
+    wrongResults = [];
     for(var i = 0; i < problemData.problemIdList.length; i++){
         var id = problemData.problemIdList[i];
         var resultList = solvedData[id];
@@ -37,6 +38,8 @@ function addWrongProblems(){
                 wrongResults.push(result);
         }
     }
+    wrongResults = wrongResults.sort(
+        function(a,b){return a.time - b.time;});
     for(var i = 0; i < wrongResults.length; i++){
         var result = wrongResults[i];
         var problem = problemData.problems[result.id];
